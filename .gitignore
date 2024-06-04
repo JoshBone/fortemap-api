@@ -160,3 +160,10 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+fortemap_api/settings_components/local.py
+.idea
+.DS_Store
+static
+photos/management/commands/*.json
+photos/management/commands/insert_from_json.py
