@@ -22,7 +22,22 @@ class LocationListSerializer(serializers.ModelSerializer):
 
 class PhotoDetailSerializer(serializers.ModelSerializer):
     locations = LocationListSerializer(many=True)
+    mapcenter_lat = serializers.SerializerMethodField()
+    mapcenter_long = serializers.SerializerMethodField()
+
+    def get_mapcenter_lat(self, obj):
+        lat_sum = 0
+        for loc in obj.locations.all():
+            lat_sum += loc.latitude
+        return lat_sum / obj.locations.count()
+
+    def get_mapcenter_long(self, obj):
+        long_sum = 0
+        for loc in obj.locations.all():
+            long_sum += loc.longitude
+        return long_sum / obj.locations.count()
 
     class Meta:
         model = Photo
-        fields = ['id', 'fortepan_id', 'description_original', 'description_geocoded', 'locations']
+        fields = ['id', 'fortepan_id', 'description_original', 'description_geocoded', 'locations',
+                  'mapcenter_lat', 'mapcenter_long']
