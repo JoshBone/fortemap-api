@@ -166,4 +166,4 @@ fortemap_api/settings_components/local.py
 .DS_Store
 static
 photos/management/commands/*.json
-photos/management/commands/insert_from_json.py
+# photos/management/commands/insert_from_json.py
