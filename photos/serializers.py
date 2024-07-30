@@ -29,13 +29,15 @@ class PhotoDetailSerializer(serializers.ModelSerializer):
         lat_sum = 0
         for loc in obj.locations.all():
             lat_sum += loc.latitude
-        return lat_sum / obj.locations.count()
+        if obj.locations.count() > 0:
+            return lat_sum / obj.locations.count()
 
     def get_mapcenter_long(self, obj):
         long_sum = 0
         for loc in obj.locations.all():
             long_sum += loc.longitude
-        return long_sum / obj.locations.count()
+        if obj.locations.count() > 0:
+            return long_sum / obj.locations.count()
 
     class Meta:
         model = Photo
