@@ -22,8 +22,8 @@ class Location(models.Model):
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE, related_name='locations')
     original_address = models.CharField(max_length=500)
     geocoded_address = models.TextField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     geotag_provider = models.CharField(max_length=50)
 
     class Meta:
