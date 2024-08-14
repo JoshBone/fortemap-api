@@ -4,14 +4,9 @@ from photos.models import Photo, Location
 
 
 class PhotoListSerializer(serializers.ModelSerializer):
-    locations_count = serializers.SerializerMethodField()
-
-    def get_locations_count(self, obj):
-        return obj.locations.filter(geotag_provider='Nominatim').count()
-
     class Meta:
         model = Photo
-        fields = ['id', 'fortepan_id', 'place', 'year', 'description_original', 'locations_count']
+        fields = ['id', 'fortepan_id', 'place', 'year', 'description_original', 'status', 'locations_count']
 
 
 class LocationListSerializer(serializers.ModelSerializer):
@@ -42,4 +37,4 @@ class PhotoDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ['id', 'fortepan_id', 'description_original', 'description_geocoded', 'locations',
-                  'mapcenter_lat', 'mapcenter_long']
+                  'mapcenter_lat', 'mapcenter_long', 'status']
