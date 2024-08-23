@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.models import Photo
-from photos.serializers import PhotoListSerializer, PhotoDetailSerializer
+from photos.serializers import PhotoListSerializer, PhotoDetailSerializer, LocationListSerializer
+from photos.models import Location
 
 
 class PhotoFilter(filters.FilterSet):
@@ -50,3 +51,30 @@ class PlacesList(APIView):
         places = Photo.objects.values('place').distinct()
         return Response(places)
 
+
+class LocationsFilter(filters.FilterSet):
+    class Meta:
+        model = Location
+        fields = ['photo_id']
+
+
+class LocationsList(generics.ListAPIView):
+    permission_classes = []
+    queryset = Location.objects.all()
+    serializer_class = LocationListSerializer
+    filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
+    filterset_class = LocationsFilter
+
+
+class LocationsDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = []
+    queryset = Location.objects.all()
+    serializer_class = LocationListSerializer
+
+    def get_object(self):
+        return get_object_or_404(Location, id=self.kwargs['pk'])
+    
+class LocationsCreate(generics.CreateAPIView):
+    permission_classes = []
+    queryset = Location.objects.all()
+    serializer_class = LocationListSerializer
