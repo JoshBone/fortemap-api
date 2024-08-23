@@ -12,6 +12,8 @@ PHOTO_STATUSES = [
 # Create your models here.
 class Photo(models.Model):
     id = models.AutoField(primary_key=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
     fortepan_id = models.IntegerField()
     place = models.CharField(max_length=500, blank=True, null=True)
     description_original = models.TextField()
@@ -34,6 +36,8 @@ class Photo(models.Model):
 
 class Location(models.Model):
     id = models.AutoField(primary_key=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE, related_name='locations')
     original_address = models.CharField(max_length=500)
     geocoded_address = models.TextField()
