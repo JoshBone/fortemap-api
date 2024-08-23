@@ -1,0 +1,13 @@
+import os
+
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+DEBUG = True
+ALLOWED_HOSTS = ['fmt.nektonik.com','localhost','fortemap.local', '127.0.0.1']
+
+MAPBOX_API_KEY = os.environ['MAPBOX_API_KEY']
+
+#CORS_ORIGIN_ALLOW_ALL = True
+#CORS_ORIGIN_ALLOW_ALL = False
+#CORS_ORIGIN_WHITELIST = (
+#  'http://localhost:3000',
+#)
