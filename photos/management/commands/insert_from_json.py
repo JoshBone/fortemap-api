@@ -15,12 +15,16 @@ DISTRICT = ' V.'
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument("--in_file", type=str, default=FILE)
+
     def handle(self, *args, **options):
-        filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), FILE)
+        filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), options['in_file'])
 
         with open(filename, 'r') as json_file:
             results = json.load(json_file)
-            for idx, hit in enumerate(results['hits']['hits']):
+            #for idx, hit in enumerate(results['hits']['hits']):
+            for idx, hit in enumerate(results):
                 record = hit['_source']
                 city = CITY
 
