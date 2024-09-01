@@ -16,9 +16,7 @@ class PhotoFilter(filters.FilterSet):
     locations_count = filters.NumberFilter(method='filter_locations_count')
 
     def filter_locations_count(self, queryset, name, value):
-        if value:
-            queryset = queryset.annotate(loc=Count('locations')).filter(loc=value)
-        return queryset
+        return queryset.annotate(loc=Count('locations')).filter(loc=value)
 
     class Meta:
         model = Photo
