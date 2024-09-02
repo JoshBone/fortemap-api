@@ -6,9 +6,10 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from photos.models import Photo
-from photos.serializers import PhotoListSerializer, PhotoDetailSerializer, LocationListSerializer
+from photos.serializers import PhotoListSerializer, PhotoDetailSerializer, LocationListSerializer, PhotoUpdateSerializer
 from photos.models import Location
 
 
@@ -33,13 +34,26 @@ class PhotosList(generics.ListAPIView):
     search_fields = ('description_original', 'place', 'year', 'fortepan_id')
 
 
-class PhotosDetail(generics.RetrieveAPIView):
+class PhotosDetail(generics.RetrieveUpdateAPIView):
     permission_classes = []
+    http_method_names = ['get', 'patch']
     queryset = Photo.objects.all()
     serializer_class = PhotoDetailSerializer
 
     def get_object(self):
         return get_object_or_404(Photo, fortepan_id=self.kwargs['pk'])
+    
+    def partial_update(self, request, pk=None):
+        instance = self.get_object()
+        serializer = PhotoUpdateSerializer(
+            instance,
+            data=request.data,
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        response_serializer = PhotoDetailSerializer(instance)
+        return Response(data=response_serializer.data, status=status.HTTP_202_ACCEPTED)
 
 
 class PlacesList(APIView):

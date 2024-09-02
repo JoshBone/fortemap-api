@@ -14,6 +14,10 @@ class LocationListSerializer(serializers.ModelSerializer):
         model = Location
         fields = '__all__'
 
+class PhotoUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = ['status']
 
 class PhotoDetailSerializer(serializers.ModelSerializer):
     locations = LocationListSerializer(many=True)
