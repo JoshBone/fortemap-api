@@ -59,7 +59,7 @@ class Command(BaseCommand):
         results = []
 
         while len(results) < max_results or max_results == 0:
-            size_to_get = MAX_RESULTS_PER_QERY if max_results-len(results)>=MAX_RESULTS_PER_QERY else max_results-len(results),
+            size_to_get = MAX_RESULTS_PER_QERY if max_results-len(results)>=MAX_RESULTS_PER_QERY else max_results-len(results)
             if max_results == 0:
                 size_to_get = MAX_RESULTS_PER_QERY
 
