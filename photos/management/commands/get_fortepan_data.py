@@ -5,8 +5,8 @@ from django.core.management import BaseCommand
 import requests
 
 
-DEFAULT_CITY = 'Budapest'
-DEFAULT_DISTRICT = ' V.'
+DEFAULT_CITY = 'budapest'
+DEFAULT_DISTRICT = ' v.'
 DEFAULT_MAX_RESULTS = 1000
 MAX_RESULTS_PER_QERY = 1000
 
