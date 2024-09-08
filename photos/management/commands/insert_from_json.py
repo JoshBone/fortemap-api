@@ -17,10 +17,14 @@ DISTRICT = ' V.'
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--in_file", type=str, default=FILE)
+        parser.add_argument("--mid", nargs='+', type=int)
 
     def handle(self, *args, **options):
         filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), options['in_file'])
 
+        print("Importing records from file: %s" % filename)
+        if options['mid']:
+            print('Importing only with mids: %s' % options['mid'])
         with open(filename, 'r') as json_file:
             results = json.load(json_file)
             #for idx, hit in enumerate(results['hits']['hits']):
@@ -28,6 +32,9 @@ class Command(BaseCommand):
                 record = hit['_source']
                 city = CITY
 
+                if options['mid']:
+                    if record['mid'][0] not in options['mid']:
+                        continue
                 photo, created = Photo.objects.get_or_create(
                     fortepan_id=record['mid'][0]
                 )
