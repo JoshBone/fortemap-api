@@ -3,6 +3,7 @@ import os
 
 from django.core.management import BaseCommand
 
+from photos.address_guesser.address_manipulations import AddressManipulations
 from photos.address_guesser.fortepan_address_guesser_with_ner import FortepanAddressGuesserWithNER
 from photos.models import Photo, Location
 
@@ -25,6 +26,7 @@ class Command(BaseCommand):
         print("Importing records from file: %s" % filename)
         if options['mid']:
             print('Importing only with mids: %s' % options['mid'])
+        address_manipulations = AddressManipulations()
         with open(filename, 'r') as json_file:
             results = json.load(json_file)
             #for idx, hit in enumerate(results['hits']['hits']):
@@ -35,6 +37,9 @@ class Command(BaseCommand):
                 if options['mid']:
                     if record['mid'][0] not in options['mid']:
                         continue
+
+                #print('---')
+                #print(hit)
                 photo, created = Photo.objects.get_or_create(
                     fortepan_id=record['mid'][0]
                 )
@@ -44,8 +49,9 @@ class Command(BaseCommand):
                 else:
                     description = ''
 
+                description = address_manipulations.remove_fortepan_attribution_text(description)
                 fortepan_address_guesser = FortepanAddressGuesserWithNER(description, city, record['mid'][0], DISTRICT)
-                fortepan_address_guesser.ner()
+                fortepan_address_guesser.ner(address_manipulations)
 
                 obj = fortepan_address_guesser.address_object
 
@@ -55,9 +61,13 @@ class Command(BaseCommand):
                 photo.place = CITY
                 photo.save()
 
+                #photo.description_original = obj['description']
+                print("mid: %d--------------" % record['mid'][0])
+                print("photo.description_original %s" % obj['description'])
+                print("photo.description_geocoded %s %s" % (obj['tagged_text'], obj['places']))
                 print("Processed record: %s" % photo.fortepan_id)
 
-                geocoded_places = fortepan_address_guesser.geocode_nominatim(POSTAL_CODES)
+                geocoded_places = fortepan_address_guesser.geocode_nominatim(POSTAL_CODES, address_manipulations)
 
                 for place in geocoded_places:
                     if 'original_address' in place.keys():
