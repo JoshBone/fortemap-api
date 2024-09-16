@@ -21,7 +21,7 @@ class PhotoFilter(filters.FilterSet):
 
     class Meta:
         model = Photo
-        fields = ['status', 'place']
+        fields = ['status', 'place', 'editor']
 
 
 class PhotosList(generics.ListAPIView):
@@ -42,18 +42,11 @@ class PhotosDetail(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return get_object_or_404(Photo, fortepan_id=self.kwargs['pk'])
-    
-    def partial_update(self, request, pk=None):
-        instance = self.get_object()
-        serializer = PhotoUpdateSerializer(
-            instance,
-            data=request.data,
-            partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        response_serializer = PhotoDetailSerializer(instance)
-        return Response(data=response_serializer.data, status=status.HTTP_202_ACCEPTED)
+
+    '''
+    UpdateAPIView automatically generate the PATCH handling, there is no need to implement it, unless,
+    we need someting different than the default behaviour.
+    '''
 
 
 class PlacesList(APIView):
@@ -90,3 +83,11 @@ class LocationsCreate(generics.CreateAPIView):
     permission_classes = []
     queryset = Location.objects.all()
     serializer_class = LocationListSerializer
+
+
+class EditorList(APIView):
+    permission_classes = []
+
+    def get(self, request, format=None):
+        editors = Photo.objects.exclude(editor__isnull=True).order_by().values_list('editor').distinct()
+        return Response(editors)

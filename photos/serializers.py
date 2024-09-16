@@ -6,7 +6,7 @@ from photos.models import Photo, Location
 class PhotoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
-        fields = ['id', 'fortepan_id', 'place', 'year', 'description_original', 'status', 'locations_count']
+        fields = ['id', 'fortepan_id', 'place', 'year', 'description_original', 'status', 'editor', 'locations_count']
 
 
 class LocationListSerializer(serializers.ModelSerializer):
@@ -41,4 +41,4 @@ class PhotoDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ['id', 'fortepan_id', 'description_original', 'description_geocoded', 'locations',
-                  'mapcenter_lat', 'mapcenter_long', 'status']
+                  'mapcenter_lat', 'mapcenter_long', 'editor', 'comment', 'status']
