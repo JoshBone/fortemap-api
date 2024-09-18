@@ -91,3 +91,11 @@ class EditorList(APIView):
     def get(self, request, format=None):
         editors = Photo.objects.exclude(editor__isnull=True).order_by().values_list('editor').distinct()
         return Response(editors)
+
+
+class PlaceList(APIView):
+    permission_classes = []
+
+    def get(self, request, format=None):
+        places = Photo.objects.exclude(place__isnull=True).order_by().values_list('place').distinct()
+        return Response(places)
