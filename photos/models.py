@@ -42,6 +42,7 @@ class Location(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE, related_name='locations')
+    shooting_location = models.BooleanField(default=False)
     original_address = models.CharField(max_length=500)
     geocoded_address = models.TextField()
     latitude = models.FloatField(blank=True, null=True)
