@@ -28,6 +28,7 @@ class AddressManipulations:
         "Palota[LOC-E]": ["Palot\[LOC-E\]a"],
         "[LOC-B]József nádor tér[LOC-E]": ["\[LOC-B\]József nád\[LOC-E\]or \[LOC-B\]tér\[LOC-E\]"],
         " köz[LOC-E]": ["\[LOC-E\] \[LOC-B\]köz\[LOC-E\]"],
+        "[LOC-B]Káptalandomb[LOC-E]": ["\[LOC-B\]K\[LOC-E\]áptalan\[LOC-B\]##domb\[LOC-E\]"],
 
     }
 
