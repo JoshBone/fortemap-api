@@ -40,6 +40,15 @@ class PhotosDetail(generics.RetrieveUpdateAPIView):
     queryset = Photo.objects.all()
     serializer_class = PhotoDetailSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        print(self.kwargs)
+        if 'photo_table_filter' in self.kwargs:
+            context["photo_table_filter"] = self.kwargs['photo_table_filter']
+        else:
+            context["photo_table_filter"]=''
+        return context
+
     def get_object(self):
         return get_object_or_404(Photo, fortepan_id=self.kwargs['pk'])
 

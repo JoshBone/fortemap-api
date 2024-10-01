@@ -8,6 +8,7 @@ app_name = 'photos'
 urlpatterns = [
     path('', PhotosList.as_view(), name='photos-list'),
     path('<int:pk>/', PhotosDetail.as_view(), name='photos-detail'),
+    path('<int:pk>/photo_table_filter=<str:photo_table_filter>', PhotosDetail.as_view(), name='photos-detail'),
 
     path('places/', PlacesList.as_view(), name='places-list'),
     
