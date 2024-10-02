@@ -29,6 +29,7 @@ class Photo(models.Model):
 
     class Meta:
         db_table = 'photos'
+        ordering = ['fortepan_id']
         indexes = [
             models.Index(fields=['fortepan_id']),
             models.Index(fields=['place']),
