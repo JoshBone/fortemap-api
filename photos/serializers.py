@@ -44,14 +44,18 @@ class PhotoDetailSerializer(serializers.ModelSerializer):
 
         if 'locations_count' in filter_params:
             filter_params['location_count'] = filter_params.pop('locations_count')
-
+        
+        search_query = ~Q(pk__in=[])
+        if 'search' in filter_params:
+            search_str = filter_params.pop('search')
+            search_query = (Q( description_original__icontains=search_str) | Q(place__icontains=search_str) |  Q(year__icontains=search_str) | Q(fortepan_id__icontains=search_str))
         ##ha nincs kereses, nincs kovetkezo foto. 
         # if not filter_params:
         #     return None
 
         filter_params['fortepan_id__gt']=obj.fortepan_id
 
-        photos = Photo.objects.annotate(location_count=Count('locations')).filter(**filter_params).order_by('fortepan_id')[:1]
+        photos = Photo.objects.annotate(location_count=Count('locations')).filter(Q(**filter_params) & search_query).order_by('fortepan_id')[:1]
 
         if photos.count() > 0:
             next_photo = photos[0]
