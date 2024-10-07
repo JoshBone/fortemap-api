@@ -1,7 +1,7 @@
 from django.urls import path
 
 from photos.views import PhotosList, PhotosDetail, PlacesList, LocationsList, LocationsDetail, LocationsCreate, \
-    EditorList, PlaceList
+    EditorList, PlaceList, LocationsBatchCreate
 
 app_name = 'photos'
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path('locations/', LocationsList.as_view(), name='locations-list'),
     path('locations/<int:pk>/', LocationsDetail.as_view(), name='locations-detail'),
     path('locations/create/', LocationsCreate.as_view(), name='locations-create'),
+    path('locations/batch-create/', LocationsBatchCreate.as_view(), name='locations-batch-create'),
 
     path('select/editors', EditorList.as_view(), name='select-editors'),
     path('select/places', PlaceList.as_view(), name='select-places'),

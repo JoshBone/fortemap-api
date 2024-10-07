@@ -2,6 +2,7 @@ from urllib.parse import urlparse, parse_qs
 
 from django.db.models import Count, Q
 from rest_framework import serializers
+from rest_framework.serializers import ListSerializer
 
 from photos.models import Photo, Location
 
@@ -16,6 +17,12 @@ class LocationListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = '__all__'
+
+
+class LocationBatchCreateSerializer(serializers.ModelSerializer):
+    photos = serializers.ListSerializer(child=serializers.IntegerField())
+    location = LocationListSerializer(many=False)
+
 
 class PhotoUpdateSerializer(serializers.ModelSerializer):
     class Meta:

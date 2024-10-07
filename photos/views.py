@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -6,10 +7,11 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
 
+import photos
 from photos.models import Photo
-from photos.serializers import PhotoListSerializer, PhotoDetailSerializer, LocationListSerializer, PhotoUpdateSerializer
+from photos.serializers import PhotoListSerializer, PhotoDetailSerializer, LocationListSerializer, \
+    LocationBatchCreateSerializer
 from photos.models import Location
 
 
@@ -87,11 +89,36 @@ class LocationsDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return get_object_or_404(Location, id=self.kwargs['pk'])
-    
+
+
 class LocationsCreate(generics.CreateAPIView):
     permission_classes = []
     queryset = Location.objects.all()
     serializer_class = LocationListSerializer
+
+
+class LocationsBatchCreate(APIView):
+    permission_classes = []
+    serializer_class = LocationBatchCreateSerializer
+
+    def post(self, request, format=None):
+        photos = request.data.get('photos', [])
+        location = request.data.get('location', None)
+
+        for photo_id in photos:
+            try:
+                photo = Photo.objects.get(fortepan_id=photo_id)
+                loc, created = Location.objects.get_or_create(
+                    photo=photo,
+                    original_address=location['original_address'],
+                    geocoded_address=location['geocoded_address'],
+                    latitude=location['latitude'],
+                    longitude=location['longitude'],
+                    geotag_provider=location['geotag_provider']
+                )
+            except ObjectDoesNotExist:
+                continue
+        return Response({'status': 'ok'})
 
 
 class EditorList(APIView):
