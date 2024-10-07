@@ -1,6 +1,6 @@
 from urllib.parse import urlparse, parse_qs
 
-from django.db.models import Count
+from django.db.models import Count, Q
 from rest_framework import serializers
 
 from photos.models import Photo, Location
