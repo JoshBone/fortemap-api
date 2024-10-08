@@ -135,3 +135,15 @@ class PlaceList(APIView):
     def get(self, request, format=None):
         places = Photo.objects.exclude(place__isnull=True).order_by().values_list('place').distinct()
         return Response(places)
+
+class StatisticsList(APIView):
+    permission_classes = []
+
+    def get(self, request, format=None):
+        stats = {}
+        editors = Photo.objects.exclude(editor__isnull=True).order_by('editor').values_list('editor').distinct()
+        for editor in editors:
+            ready = Photo.objects.filter(editor=editor[0], status='OK').count()
+            total = Photo.objects.filter(editor=editor[0]).count()
+            stats[editor[0]] = {'total': total, 'ready': ready}
+        return Response(stats)
