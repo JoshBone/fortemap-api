@@ -140,12 +140,12 @@ class StatisticsList(APIView):
     permission_classes = []
 
     def get(self, request, format=None):
-        stats = {}
+        stats = []
         editors = Photo.objects.exclude(editor__isnull=True).order_by('editor').values_list('editor').distinct()
         for editor in editors:
             ok = Photo.objects.filter(editor=editor[0], status='OK').count()
             nk = Photo.objects.filter(editor=editor[0], status='NK').count()
             elh_var = Photo.objects.filter(editor=editor[0], status='ELH_VAR').count()
             total = Photo.objects.filter(editor=editor[0]).count()
-            stats[editor[0]] = {'total': total, 'OK': ok, 'NK': nk, 'ELH_VAR': elh_var}
+            stats.append({'editor': editor, 'total': total, 'OK': ok, 'NK': nk, 'ELH_VAR': elh_var})
         return Response(stats)
