@@ -147,5 +147,5 @@ class StatisticsList(APIView):
             nk = Photo.objects.filter(editor=editor[0], status='NK').count()
             elh_var = Photo.objects.filter(editor=editor[0], status='ELH_VAR').count()
             total = Photo.objects.filter(editor=editor[0]).count()
-            stats.append({'editor': editor, 'total': total, 'OK': ok, 'NK': nk, 'ELH_VAR': elh_var})
+            stats.append({'editor': editor[0], 'total': total, 'OK': ok, 'NK': nk, 'ELH_VAR': elh_var})
         return Response(stats)
