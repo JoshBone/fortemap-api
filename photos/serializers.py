@@ -2,10 +2,15 @@ from urllib.parse import urlparse, parse_qs
 
 from django.db.models import Count, Q
 from rest_framework import serializers
-from rest_framework.serializers import ListSerializer
 
 from photos.models import Photo, Location
 
+PHOTO_STATUSES = [
+    ('ELL_VAR', 'Ellenőrzésre vár'),
+    ('ELH_VAR', 'Elhelyezésre vár'),
+    ('OK', 'Elhelyezve'),
+    ('NK', 'Nincs Koordináta')
+]
 
 class PhotoListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +27,11 @@ class LocationListSerializer(serializers.ModelSerializer):
 class LocationBatchCreateSerializer(serializers.ModelSerializer):
     photos = serializers.ListSerializer(child=serializers.IntegerField())
     location = LocationListSerializer(many=False)
+
+
+class PhotoBatchStatusModifySerializer(serializers.ModelSerializer):
+    photos = serializers.ListSerializer(child=serializers.IntegerField())
+    status = serializers.ChoiceField(choices=PHOTO_STATUSES)
 
 
 class PhotoUpdateSerializer(serializers.ModelSerializer):

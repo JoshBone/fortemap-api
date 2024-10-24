@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 import photos
 from photos.models import Photo
 from photos.serializers import PhotoListSerializer, PhotoDetailSerializer, LocationListSerializer, \
-    LocationBatchCreateSerializer
+    LocationBatchCreateSerializer, PhotoBatchStatusModifySerializer
 from photos.models import Location
 
 
@@ -95,6 +95,24 @@ class LocationsCreate(generics.CreateAPIView):
     permission_classes = []
     queryset = Location.objects.all()
     serializer_class = LocationListSerializer
+
+
+class PhotoBatchStatusModify(APIView):
+    permission_classes = []
+    serializer_class = PhotoBatchStatusModifySerializer
+
+    def post(self, request, format=None):
+        photos = request.data.get('photos', [])
+        status = request.data.get('status', None)
+
+        for photo_id in photos:
+            try:
+                photo = Photo.objects.get(fortepan_id=photo_id)
+                photo.status = status
+                photo.save()
+            except ObjectDoesNotExist:
+                continue
+        return Response({'status': 'ok'})
 
 
 class LocationsBatchCreate(APIView):
