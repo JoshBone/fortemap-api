@@ -40,12 +40,12 @@ class FortepanLocationIndexer:
         }
         self.doc['cimke'] = self.fortepan_data['_source'].get('cimke_name', None)
         self.doc['adomanyozo'] = self.fortepan_data['_source'].get('adomanyozo_name', None)
-        self.doc['leiras'] = self.fortepan_data['_source'].get('description', [])[0]
+        self.doc['leiras'] = self.fortepan_data['_source'].get('description', [''])[0]
         self.doc['varos'] = self.place
 
     def index(self):
         try:
             self.meilisearch_index.add_documents([self.doc])
-            print("One document added")
+            print("Document %s added" % self.doc['id'])
         except Exception as e:
             print('Error with Report No. %s! Error: %s' % (self.doc['id'], e))
