@@ -38,9 +38,9 @@ class FortepanLocationIndexer:
             'lat': self.location.latitude,
             'lng': self.location.longitude,
         }
-        self.doc['cimke'] = self.fortepan_data['_source']['cimke_name']
-        self.doc['adomanyozo'] = self.fortepan_data['_source']['adomanyozo_name']
-        self.doc['leiras'] = self.fortepan_data['_source']['description'][0]
+        self.doc['cimke'] = self.fortepan_data['_source'].get('cimke_name', None)
+        self.doc['adomanyozo'] = self.fortepan_data['_source'].get('adomanyozo_name', None)
+        self.doc['leiras'] = self.fortepan_data['_source'].get('description', [])[0]
         self.doc['varos'] = self.place
 
     def index(self):
