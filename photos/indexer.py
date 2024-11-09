@@ -10,13 +10,9 @@ class FortepanLocationIndexer:
     Class to index Location records.
     """
 
-    def __init__(self, place='Budapest V.'):
-        FILEZ = {
-            'Budapest V.': 'FortepanVker10000.json',
-            'Győr': 'gyor-all.json'
-        }
+    def __init__(self, place='Budapest V.', input_file=''):
         self.place = place
-        self.data_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'management', 'commands', FILEZ.get(place, ''))
+        self.data_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'management', 'commands', input_file)
         self.data = json.load(open(self.data_file))
         self.fortepan_data = {}
         self.location = None
@@ -30,7 +26,7 @@ class FortepanLocationIndexer:
         self.meilisearch_index = self.client.index(self.meilisearch_index_name)
 
     def get_fortepan_data(self, fortepan_id):
-        self.fortepan_data = list(filter(lambda d: d['_source']['mid'] == [fortepan_id], self.data['hits']['hits']))[0]
+        self.fortepan_data = list(filter(lambda d: d['_source']['mid'] == [fortepan_id], self.data))[0]
 
     def set_location(self, location):
         self.location = location
