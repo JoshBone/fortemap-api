@@ -41,7 +41,31 @@ class FortepanLocationIndexer:
         self.doc['cimke'] = self.fortepan_data['_source'].get('cimke_name', None)
         self.doc['adomanyozo'] = self.fortepan_data['_source'].get('adomanyozo_name', None)
         self.doc['leiras'] = self.fortepan_data['_source'].get('description', [''])[0]
-        self.doc['varos'] = self.place
+        self.doc['kerulet'] = self.place
+        self.doc['kerulet_geo'] = self.get_kerulet_geo(self.place)
+        self.doc['varos'] = self.get_varos(self.place)
+        self.doc['varos_geo'] = self.get_varos_geo(self.place)
+
+    def get_varos(self, place):
+        varos = {
+            'Budapest V.': 'Budapest',
+            'Győr': 'Győr'
+        }
+        return varos[place]
+
+    def get_kerulet_geo(self, place):
+        kerulet = {
+            'Budapest V.': {'lat': 47.5002596, 'lng': 19.0314329},
+            'Győr': {'lat': 47.6692398, 'lng': 17.3468638},
+        }
+        return kerulet[place]
+
+    def get_varos_geo(self, place):
+        kerulet = {
+            'Budapest V.': {'lat': 47.4813274, 'lng': 18.9654951},
+            'Győr': {'lat': 47.6692398, 'lng': 17.3468638},
+        }
+        return kerulet[place]
 
     def index(self):
         try:
