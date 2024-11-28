@@ -1,7 +1,7 @@
 accelerate==0.31.0
 annotated-types==0.7.0
 asgiref==3.8.1
-camel-converter==4.0.1
+camel-converter==3.1.2
 certifi==2024.6.2
 cffi==1.17.1
 charset-normalizer==3.3.2
